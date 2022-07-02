@@ -1,6 +1,7 @@
 const Client = require('../models/Client');
 const Address = require('../models/Address');
 const { validateUUID } = require('../lib/validation');
+const FtpDetail = require('../models/ftpDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -13,7 +14,7 @@ const getSingleClient = async (req, res) => {
   const { id } = req.params;
 
   // validate id
-  if (validateUUID(id)) {
+  if (!validateUUID(id)) {
     return res.status(404).json({ error: 'No Client Found' });
   }
 
@@ -25,13 +26,19 @@ const getSingleClient = async (req, res) => {
     return res.status(404).json({ error: 'No Client Found' });
   }
 
+  // find relevant client details
   const address = await Address.findOne({
     raw: true,
     where: { id: client.address },
   });
 
+  const ftpDetails = await FtpDetail.findAll({
+    raw: true,
+    where: { clientId: id },
+  });
+
   // client to show to user
-  const fullClient = { ...client, address };
+  const fullClient = { ...client, address, ftpDetails };
 
   res.status(200).json(fullClient);
 };
@@ -67,7 +74,7 @@ const putUpdateClient = async (req, res) => {
   const { address, client } = req.body;
 
   // validate id
-  if (validateUUID(id)) {
+  if (!validateUUID(id)) {
     return res.status(404).json({ error: 'No Client Found' });
   }
 
@@ -111,7 +118,7 @@ const deleteClient = async (req, res) => {
   const { id } = req.params;
 
   // validate id
-  if (validateUUID(id)) {
+  if (!validateUUID(id)) {
     return res.status(404).json({ error: 'No Client Found' });
   }
 
@@ -131,7 +138,7 @@ const deleteClient = async (req, res) => {
   await client.destroy();
   await address.destroy();
 
-  res.status(200).json();
+  res.status(200).json({ success: true });
 };
 
 module.exports = {

@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const ftpRoutes = require('../routes/ftpRoutes');
+
 const {
   getAllClients,
   getSingleClient,
@@ -7,6 +9,8 @@ const {
   putUpdateClient,
   deleteClient,
 } = require('../controllers/clientController');
+
+router.use('/ftp-details', ftpRoutes);
 
 router.get('/', getAllClients);
 
