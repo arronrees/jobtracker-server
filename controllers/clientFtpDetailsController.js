@@ -1,5 +1,5 @@
 const { validateUUID } = require('../lib/validation');
-const FtpDetail = require('../models/ftpDetail');
+const FtpDetail = require('../models/FtpDetail');
 
 const postNewClientFtpDetails = async (req, res) => {
   const { clientId } = req.params;

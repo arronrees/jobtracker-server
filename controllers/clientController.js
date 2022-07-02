@@ -1,7 +1,7 @@
 const Client = require('../models/Client');
 const Address = require('../models/Address');
 const { validateUUID } = require('../lib/validation');
-const FtpDetail = require('../models/ftpDetail');
+const FtpDetail = require('../models/FtpDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients

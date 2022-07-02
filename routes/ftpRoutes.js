@@ -2,7 +2,7 @@ const {
   postNewClientFtpDetails,
   putUpdateClientFtpDetails,
   deleteClientFtpDetails,
-} = require('../controllers/clientDetailsController');
+} = require('../controllers/clientFtpDetailsController');
 
 const router = require('express').Router();
 

@@ -1,7 +1,7 @@
 const { DataTypes, UUID, UUIDV4 } = require('sequelize');
 const { db } = require('../lib/db');
 
-const FtpDetail = db.define('ftpDetail', {
+const EmailDetail = db.define('emailDetail', {
   id: {
     primaryKey: true,
     type: UUID,
@@ -12,21 +12,16 @@ const FtpDetail = db.define('ftpDetail', {
     type: UUID,
     allowNull: false,
   },
-  url: {
+  domain: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  ftpAddress: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  hostDirectory: {
+  email: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
   login: {
     type: DataTypes.TEXT,
-    allowNull: false,
   },
   password: {
     type: DataTypes.TEXT,
@@ -34,8 +29,8 @@ const FtpDetail = db.define('ftpDetail', {
   },
 });
 
-FtpDetail.sync({ force: false }).then(() => {
-  console.log('[Model] [FtpDetail] Synced');
+EmailDetail.sync({ force: false }).then(() => {
+  console.log('[Model] [EmailDetail] Synced');
 });
 
-module.exports = FtpDetail;
+module.exports = EmailDetail;
