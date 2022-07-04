@@ -36,7 +36,7 @@ const putUpdateClientEmailDetails = async (req, res) => {
 
   // check if exists
   if (!emailDetail) {
-    return res.status(404).json({ error: 'No ftp details found' });
+    return res.status(404).json({ error: 'No email details found' });
   }
 
   // update details
