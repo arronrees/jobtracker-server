@@ -4,6 +4,7 @@ const { validateUUID } = require('../lib/validation');
 const FtpDetail = require('../models/FtpDetail');
 const EmailDetail = require('../models/EmailDetail');
 const DatabaseDetail = require('../models/DatabaseDetail');
+const CmsDetail = require('../models/CmsDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -53,6 +54,13 @@ const getSingleClient = async (req, res) => {
     },
   });
 
+  const cmsDetails = await CmsDetail.findAll({
+    raw: true,
+    where: {
+      clientId: id,
+    },
+  });
+
   // client to show to user
   const fullClient = {
     ...client,
@@ -60,6 +68,7 @@ const getSingleClient = async (req, res) => {
     ftpDetails,
     emailDetails,
     databaseDetails,
+    cmsDetails,
   };
 
   res.status(200).json(fullClient);
