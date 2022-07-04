@@ -3,6 +3,7 @@ const Address = require('../models/Address');
 const { validateUUID } = require('../lib/validation');
 const FtpDetail = require('../models/FtpDetail');
 const EmailDetail = require('../models/EmailDetail');
+const DatabaseDetail = require('../models/DatabaseDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -45,8 +46,21 @@ const getSingleClient = async (req, res) => {
     },
   });
 
+  const databaseDetails = await DatabaseDetail.findAll({
+    raw: true,
+    where: {
+      clientId: id,
+    },
+  });
+
   // client to show to user
-  const fullClient = { ...client, address, ftpDetails, emailDetails };
+  const fullClient = {
+    ...client,
+    address,
+    ftpDetails,
+    emailDetails,
+    databaseDetails,
+  };
 
   res.status(200).json(fullClient);
 };

@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const ftpRoutes = require('../routes/ftpRoutes');
 const emailRoutes = require('../routes/emailRoutes');
+const databaseRoutes = require('../routes/databaseRoutes');
 
 const {
   getAllClients,
@@ -14,6 +15,8 @@ const {
 router.use('/ftp-details', ftpRoutes);
 
 router.use('/email-details', emailRoutes);
+
+router.use('/database-details', databaseRoutes);
 
 router.get('/', getAllClients);
 
