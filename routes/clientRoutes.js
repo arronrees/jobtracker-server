@@ -4,6 +4,7 @@ const ftpRoutes = require('../routes/ftpRoutes');
 const emailRoutes = require('../routes/emailRoutes');
 const databaseRoutes = require('../routes/databaseRoutes');
 const cmsRoutes = require('../routes/cmsRoutes');
+const otherDetailRoutes = require('../routes/otherDetailRoutes');
 
 const {
   getAllClients,
@@ -20,6 +21,8 @@ router.use('/email-details', emailRoutes);
 router.use('/database-details', databaseRoutes);
 
 router.use('/cms-details', cmsRoutes);
+
+router.use('/other-details', otherDetailRoutes);
 
 router.get('/', getAllClients);
 

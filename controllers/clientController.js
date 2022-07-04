@@ -5,6 +5,7 @@ const FtpDetail = require('../models/FtpDetail');
 const EmailDetail = require('../models/EmailDetail');
 const DatabaseDetail = require('../models/DatabaseDetail');
 const CmsDetail = require('../models/CmsDetail');
+const OtherClientDetail = require('../models/OtherClientDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -61,6 +62,13 @@ const getSingleClient = async (req, res) => {
     },
   });
 
+  const otherDetails = await OtherClientDetail.findAll({
+    raw: true,
+    where: {
+      clientId: id,
+    },
+  });
+
   // client to show to user
   const fullClient = {
     ...client,
@@ -69,6 +77,7 @@ const getSingleClient = async (req, res) => {
     emailDetails,
     databaseDetails,
     cmsDetails,
+    otherDetails,
   };
 
   res.status(200).json(fullClient);
