@@ -42,7 +42,6 @@ const putUpdateClientEmailDetails = async (req, res) => {
   // update details
   emailDetail.domain = body.domain;
   emailDetail.email = body.email;
-  emailDetail.login = body.login;
   emailDetail.password = body.password;
   await emailDetail.save();
 

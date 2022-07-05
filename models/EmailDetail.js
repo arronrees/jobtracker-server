@@ -20,9 +20,6 @@ const EmailDetail = db.define('emailDetail', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  login: {
-    type: DataTypes.TEXT,
-  },
   password: {
     type: DataTypes.TEXT,
     allowNull: false,
