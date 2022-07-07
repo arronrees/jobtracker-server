@@ -141,6 +141,7 @@ const putUpdateClient = async (req, res) => {
 
   // then update client
   foundClient.name = client.name;
+  foundClient.primaryContactName = client.primaryContactName;
   foundClient.primaryContactNumber = client.primaryContactNumber;
   foundClient.primaryContactEmail = client.primaryContactEmail;
   foundClient.secondaryContactNumber = client.secondaryContactNumber;
