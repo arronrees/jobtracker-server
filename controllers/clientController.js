@@ -9,7 +9,7 @@ const OtherClientDetail = require('../models/OtherClientDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
-  const clients = await Client.findAll({});
+  const clients = await Client.findAll({ order: [['name', 'ASC']] });
 
   res.status(200).json(clients);
 };
@@ -39,6 +39,7 @@ const getSingleClient = async (req, res) => {
   const ftpDetails = await FtpDetail.findAll({
     raw: true,
     where: { clientId: id },
+    order: [['createdAt', 'ASC']],
   });
 
   const emailDetails = await EmailDetail.findAll({
@@ -46,6 +47,7 @@ const getSingleClient = async (req, res) => {
     where: {
       clientId: id,
     },
+    order: [['createdAt', 'ASC']],
   });
 
   const databaseDetails = await DatabaseDetail.findAll({
@@ -53,6 +55,7 @@ const getSingleClient = async (req, res) => {
     where: {
       clientId: id,
     },
+    order: [['createdAt', 'ASC']],
   });
 
   const cmsDetails = await CmsDetail.findAll({
@@ -60,6 +63,7 @@ const getSingleClient = async (req, res) => {
     where: {
       clientId: id,
     },
+    order: [['createdAt', 'ASC']],
   });
 
   const otherDetails = await OtherClientDetail.findAll({
@@ -67,6 +71,7 @@ const getSingleClient = async (req, res) => {
     where: {
       clientId: id,
     },
+    order: [['createdAt', 'ASC']],
   });
 
   // client to show to user

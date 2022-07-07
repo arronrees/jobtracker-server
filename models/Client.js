@@ -14,7 +14,7 @@ const Client = db.define('client', {
   },
   primaryContactName: {
     type: DataTypes.STRING(255),
-    // allowNull: false,
+    allowNull: false,
   },
   primaryContactNumber: {
     type: DataTypes.STRING(255),
