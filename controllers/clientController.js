@@ -122,7 +122,7 @@ const postNewClient = async (req, res) => {
   // client to show to user
   const fullNewClient = { ...newClient, address: newAddress };
 
-  res.status(200).json(fullNewClient);
+  res.status(200).json({ success: true, data: fullNewClient });
 };
 
 const putUpdateClient = async (req, res) => {
@@ -168,7 +168,7 @@ const putUpdateClient = async (req, res) => {
   // client to show to user
   const fullClient = { ...foundClient.dataValues, address: foundAddress };
 
-  res.status(200).json(fullClient);
+  res.status(200).json({ success: true, data: fullClient });
 };
 
 const deleteClient = async (req, res) => {
@@ -176,7 +176,7 @@ const deleteClient = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No Client Found' });
+    return res.status(404).json({ success: false, error: 'No Client Found' });
   }
 
   // find client
@@ -189,7 +189,10 @@ const deleteClient = async (req, res) => {
   if (!client || !address) {
     return res
       .status(400)
-      .json({ error: 'Unable to delete client, please try again' });
+      .json({
+        success: false,
+        error: 'Unable to delete client, please try again',
+      });
   }
 
   await client.destroy();

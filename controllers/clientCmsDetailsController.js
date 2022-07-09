@@ -7,7 +7,7 @@ const postNewClientCmsDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(clientId)) {
-    return res.status(202).json({ error: 'No client found' });
+    return res.status(202).json({ success: false, error: 'No client found' });
   }
 
   // create new details
@@ -19,7 +19,7 @@ const postNewClientCmsDetails = async (req, res) => {
       .json({ error: 'Unable to create cms details, please try again' });
   }
 
-  res.status(200).json(newCms);
+  res.status(200).json({ success: true, data: newCms });
 };
 
 const putUpdateClientCmsDetails = async (req, res) => {
@@ -28,7 +28,9 @@ const putUpdateClientCmsDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No cms details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No cms details found' });
   }
 
   // find current details
@@ -36,7 +38,9 @@ const putUpdateClientCmsDetails = async (req, res) => {
 
   // check if exists
   if (!cmsDetail) {
-    return res.status(404).json({ error: 'No cms details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No cms details found' });
   }
 
   // update details
@@ -46,7 +50,7 @@ const putUpdateClientCmsDetails = async (req, res) => {
   cmsDetail.password = body.password;
   await cmsDetail.save();
 
-  res.status(200).json(cmsDetail);
+  res.status(200).json({ success: true, data: cmsDetail });
 };
 
 const deleteClientCmsDetails = async (req, res) => {
@@ -54,20 +58,24 @@ const deleteClientCmsDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No cms details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No cms details found' });
   }
 
   const cmsDetail = await CmsDetail.findOne({ where: { id } });
 
   // check if exists
   if (!cmsDetail) {
-    return res.status(404).json({ error: 'No cms details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No cms details found' });
   }
 
   // delete detail
   await cmsDetail.destroy();
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: cmsDetail });
 };
 
 module.exports = {

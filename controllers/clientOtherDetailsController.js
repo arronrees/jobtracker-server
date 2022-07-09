@@ -7,7 +7,7 @@ const postNewClientOtherDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(clientId)) {
-    return res.status(202).json({ error: 'No client found' });
+    return res.status(202).json({ success: false, error: 'No client found' });
   }
 
   // create new details
@@ -16,10 +16,13 @@ const postNewClientOtherDetails = async (req, res) => {
   if (!newOtherDetail) {
     return res
       .status(400)
-      .json({ error: 'Unable to create account details, please try again' });
+      .json({
+        success: false,
+        error: 'Unable to create account details, please try again',
+      });
   }
 
-  res.status(200).json(newOtherDetail);
+  res.status(200).json({ success: true, data: newOtherDetail });
 };
 
 const putUpdateClientOtherDetails = async (req, res) => {
@@ -28,7 +31,9 @@ const putUpdateClientOtherDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No account details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No account details found' });
   }
 
   // find current details
@@ -36,7 +41,9 @@ const putUpdateClientOtherDetails = async (req, res) => {
 
   // check if exists
   if (!otherDetail) {
-    return res.status(404).json({ error: 'No account details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No account details found' });
   }
 
   // update details
@@ -47,7 +54,7 @@ const putUpdateClientOtherDetails = async (req, res) => {
   otherDetail.notes = body.notes;
   await otherDetail.save();
 
-  res.status(200).json(otherDetail);
+  res.status(200).json({ success: true, data: otherDetail });
 };
 
 const deleteClientOtherDetails = async (req, res) => {
@@ -55,14 +62,18 @@ const deleteClientOtherDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No account details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No account details found' });
   }
 
   const otherDetail = await OtherClientDetail.findOne({ where: { id } });
 
   // check if exists
   if (!otherDetail) {
-    return res.status(404).json({ error: 'No account details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No account details found' });
   }
 
   // delete detail

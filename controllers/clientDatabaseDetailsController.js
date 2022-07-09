@@ -7,19 +7,20 @@ const postNewClientDatabaseDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(clientId)) {
-    return res.status(202).json({ error: 'No client found' });
+    return res.status(202).json({ success: false, error: 'No client found' });
   }
 
   // create new details
   const newDatabaseDetail = await DatabaseDetail.create({ ...body, clientId });
 
   if (!newDatabaseDetail) {
-    return res
-      .status(400)
-      .json({ error: 'Unable to create database details, please try again' });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create database details, please try again',
+    });
   }
 
-  res.status(200).json(newDatabaseDetail);
+  res.status(200).json({ success: true, data: newDatabaseDetail });
 };
 
 const putUpdateClientDatabaseDetails = async (req, res) => {
@@ -28,7 +29,9 @@ const putUpdateClientDatabaseDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No database details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No database details found' });
   }
 
   // find current details
@@ -36,7 +39,9 @@ const putUpdateClientDatabaseDetails = async (req, res) => {
 
   // check if exists
   if (!databaseDetail) {
-    return res.status(404).json({ error: 'No database details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No database details found' });
   }
 
   // update details
@@ -46,7 +51,7 @@ const putUpdateClientDatabaseDetails = async (req, res) => {
   databaseDetail.password = body.password;
   await databaseDetail.save();
 
-  res.status(200).json(databaseDetail);
+  res.status(200).json({ success: true, data: databaseDetail });
 };
 
 const deleteClientDatabaseDetails = async (req, res) => {
@@ -54,20 +59,24 @@ const deleteClientDatabaseDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No database details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No database details found' });
   }
 
   const databaseDetail = await DatabaseDetail.findOne({ where: { id } });
 
   // check if exists
   if (!databaseDetail) {
-    return res.status(404).json({ error: 'No database details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No database details found' });
   }
 
   // delete detail
   await databaseDetail.destroy();
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: databaseDetail });
 };
 
 module.exports = {

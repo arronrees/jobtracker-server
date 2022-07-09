@@ -7,19 +7,20 @@ const postNewClientFtpDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(clientId)) {
-    return res.status(404).json({ error: 'No client found' });
+    return res.status(404).json({ success: false, error: 'No client found' });
   }
 
   // create new details
   const newFtp = await FtpDetail.create({ ...body, clientId });
 
   if (!newFtp) {
-    return res
-      .status(400)
-      .json({ error: 'Unable to create ftp details, please try again' });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create ftp details, please try again',
+    });
   }
 
-  res.status(200).json(newFtp);
+  res.status(200).json({ success: true, data: newFtp });
 };
 
 const putUpdateClientFtpDetails = async (req, res) => {
@@ -28,7 +29,9 @@ const putUpdateClientFtpDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No ftp details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No ftp details found' });
   }
 
   // find current details
@@ -36,7 +39,9 @@ const putUpdateClientFtpDetails = async (req, res) => {
 
   // check if exists
   if (!ftpDetail) {
-    return res.status(404).json({ error: 'No ftp details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No ftp details found' });
   }
 
   // update details
@@ -47,7 +52,7 @@ const putUpdateClientFtpDetails = async (req, res) => {
   ftpDetail.password = body.password;
   await ftpDetail.save();
 
-  res.status(200).json(ftpDetail);
+  res.status(200).json({ success: true, data: ftpDetail });
 };
 
 const deleteClientFtpDetails = async (req, res) => {
@@ -55,20 +60,24 @@ const deleteClientFtpDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No ftp details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No ftp details found' });
   }
 
   const ftpDetail = await FtpDetail.findOne({ where: { id } });
 
   // check if exists
   if (!ftpDetail) {
-    return res.status(404).json({ error: 'No ftp details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No ftp details found' });
   }
 
   // delete detail
   await ftpDetail.destroy();
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: ftpDetail });
 };
 
 module.exports = {

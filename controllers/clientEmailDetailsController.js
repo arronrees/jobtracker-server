@@ -7,19 +7,20 @@ const postNewClientEmailDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(clientId)) {
-    return res.status(202).json({ error: 'No client found' });
+    return res.status(202).json({ success: false, error: 'No client found' });
   }
 
   // create new details
   const newEmail = await EmailDetail.create({ ...body, clientId });
 
   if (!newEmail) {
-    return res
-      .status(400)
-      .json({ error: 'Unable to create email details, please try again' });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create email details, please try again',
+    });
   }
 
-  res.status(200).json(newEmail);
+  res.status(200).json({ success: true, data: newEmail });
 };
 
 const putUpdateClientEmailDetails = async (req, res) => {
@@ -28,7 +29,9 @@ const putUpdateClientEmailDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No email details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No email details found' });
   }
 
   // find current details
@@ -36,7 +39,9 @@ const putUpdateClientEmailDetails = async (req, res) => {
 
   // check if exists
   if (!emailDetail) {
-    return res.status(404).json({ error: 'No email details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No email details found' });
   }
 
   // update details
@@ -45,7 +50,7 @@ const putUpdateClientEmailDetails = async (req, res) => {
   emailDetail.password = body.password;
   await emailDetail.save();
 
-  res.status(200).json(emailDetail);
+  res.status(200).json({ success: true, data: emailDetail });
 };
 
 const deleteClientEmailDetails = async (req, res) => {
@@ -53,20 +58,24 @@ const deleteClientEmailDetails = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No email details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No email details found' });
   }
 
   const emailDetail = await EmailDetail.findOne({ where: { id } });
 
   // check if exists
   if (!emailDetail) {
-    return res.status(404).json({ error: 'No email details found' });
+    return res
+      .status(404)
+      .json({ success: false, error: 'No email details found' });
   }
 
   // delete detail
   await emailDetail.destroy();
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: emailDetail });
 };
 
 module.exports = {
