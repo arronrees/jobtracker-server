@@ -14,6 +14,9 @@ const {
   putUpdateClient,
   deleteClient,
 } = require('../controllers/clientController');
+const {
+  validateClientAndAddressObject,
+} = require('../middleware/modelValidation');
 
 router.use('/ftp-details', ftpRoutes);
 
@@ -31,9 +34,9 @@ router.get('/search', getAllClientsSearch);
 
 router.get('/:id', getSingleClient);
 
-router.post('/', postNewClient);
+router.post('/', validateClientAndAddressObject, postNewClient);
 
-router.put('/:id', putUpdateClient);
+router.put('/:id', validateClientAndAddressObject, putUpdateClient);
 
 router.delete('/:id', deleteClient);
 
