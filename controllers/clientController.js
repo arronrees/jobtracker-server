@@ -9,7 +9,18 @@ const OtherClientDetail = require('../models/OtherClientDetail');
 
 const getAllClients = async (req, res) => {
   // find all clients
-  const clients = await Client.findAll({ order: [['name', 'ASC']] });
+  const clients = await Client.findAll({ order: [['name', 'ASC']], raw: true });
+
+  res.status(200).json(clients);
+};
+
+const getAllClientsSearch = async (req, res) => {
+  // find all clients, just name & id
+  const clients = await Client.findAll({
+    attributes: ['name', 'id'],
+    order: [['name', 'ASC']],
+    raw: true,
+  });
 
   res.status(200).json(clients);
 };
@@ -189,6 +200,7 @@ const deleteClient = async (req, res) => {
 
 module.exports = {
   getAllClients,
+  getAllClientsSearch,
   getSingleClient,
   postNewClient,
   putUpdateClient,

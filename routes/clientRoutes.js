@@ -8,6 +8,7 @@ const otherDetailRoutes = require('../routes/otherDetailRoutes');
 
 const {
   getAllClients,
+  getAllClientsSearch,
   getSingleClient,
   postNewClient,
   putUpdateClient,
@@ -25,6 +26,8 @@ router.use('/cms-details', cmsRoutes);
 router.use('/other-details', otherDetailRoutes);
 
 router.get('/', getAllClients);
+
+router.get('/search', getAllClientsSearch);
 
 router.get('/:id', getSingleClient);
 
