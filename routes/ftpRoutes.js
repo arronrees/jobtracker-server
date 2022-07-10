@@ -3,12 +3,13 @@ const {
   putUpdateClientFtpDetails,
   deleteClientFtpDetails,
 } = require('../controllers/clientFtpDetailsController');
+const { validateFtpDetailObject } = require('../middleware/modelValidation');
 
 const router = require('express').Router();
 
-router.post('/:clientId', postNewClientFtpDetails);
+router.post('/:clientId', validateFtpDetailObject, postNewClientFtpDetails);
 
-router.put('/:id', putUpdateClientFtpDetails);
+router.put('/:id', validateFtpDetailObject, putUpdateClientFtpDetails);
 
 router.delete('/:id', deleteClientFtpDetails);
 
