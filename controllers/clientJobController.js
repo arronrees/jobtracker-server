@@ -12,17 +12,16 @@ const postNewClientJob = async (req, res) => {
 
   const newJob = await ClientJob.create({
     ...body,
+    amount: parseFloat(body.amount),
     clientId,
   });
 
   // check if job created successfully
   if (!newJob) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        error: 'Unable to create client job, please try again',
-      });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create client job, please try again',
+    });
   }
 
   res.status(200).json({ success: true });

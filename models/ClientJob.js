@@ -16,8 +16,11 @@ const ClientJob = db.define('clientJob', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  completed: {
-    type: DataTypes.BOOLEAN,
+  status: {
+    type: DataTypes.TEXT,
+  },
+  amount: {
+    type: DataTypes.STRING(255),
   },
 });
 
