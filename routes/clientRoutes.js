@@ -1,10 +1,12 @@
 const router = require('express').Router();
 
-const ftpRoutes = require('../routes/ftpRoutes');
-const emailRoutes = require('../routes/emailRoutes');
-const databaseRoutes = require('../routes/databaseRoutes');
-const cmsRoutes = require('../routes/cmsRoutes');
-const otherDetailRoutes = require('../routes/otherDetailRoutes');
+const ftpRoutes = require('./ftpRoutes');
+const emailRoutes = require('./emailRoutes');
+const databaseRoutes = require('./databaseRoutes');
+const cmsRoutes = require('./cmsRoutes');
+const otherDetailRoutes = require('./otherDetailRoutes');
+
+const clientJobRoutes = require('./clientJobRoutes');
 
 const {
   getAllClients,
@@ -27,6 +29,8 @@ router.use('/database-details', databaseRoutes);
 router.use('/cms-details', cmsRoutes);
 
 router.use('/other-details', otherDetailRoutes);
+
+router.use('/client-job', clientJobRoutes);
 
 router.get('/', getAllClients);
 

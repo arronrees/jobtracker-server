@@ -7,6 +7,7 @@ const DatabaseDetail = require('../models/DatabaseDetail');
 const CmsDetail = require('../models/CmsDetail');
 const OtherClientDetail = require('../models/OtherClientDetail');
 const { decrypt } = require('../lib/crypt');
+const ClientJob = require('../models/ClientJob');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -42,7 +43,7 @@ const getSingleClient = async (req, res) => {
     return res.status(404).json({ error: 'No Client Found' });
   }
 
-  // find relevant client details
+  // find relevant client details and decrypt passwords
   const address = await Address.findOne({
     raw: true,
     where: { id: client.address },
@@ -161,6 +162,13 @@ const getSingleClient = async (req, res) => {
     others.push(o);
   }
 
+  // get jobs
+  const jobs = await ClientJob.findAll({
+    where: { clientId: id },
+    raw: true,
+    order: [['createdAt', 'ASC']],
+  });
+
   // client to show to user
   const fullClient = {
     ...client,
@@ -170,6 +178,7 @@ const getSingleClient = async (req, res) => {
     databaseDetails: dbs,
     cmsDetails: cmss,
     otherDetails: others,
+    jobs,
   };
 
   res.status(200).json(fullClient);
@@ -192,7 +201,10 @@ const postNewClient = async (req, res) => {
   if (!newClient) {
     return res
       .status(400)
-      .json({ error: 'Unable to create client, please try again' });
+      .json({
+        success: false,
+        error: 'Unable to create client, please try again',
+      });
   }
 
   // client to show to user
