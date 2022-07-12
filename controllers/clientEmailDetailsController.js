@@ -1,5 +1,6 @@
 const { validateUUID } = require('../lib/validation');
 const EmailDetail = require('../models/EmailDetail');
+const { encrypt } = require('../lib/crypt');
 
 const postNewClientEmailDetails = async (req, res) => {
   const { clientId } = req.params;
@@ -10,8 +11,10 @@ const postNewClientEmailDetails = async (req, res) => {
     return res.status(202).json({ success: false, error: 'No client found' });
   }
 
+  const password = encrypt(body.password);
+
   // create new details
-  const newEmail = await EmailDetail.create({ ...body, clientId });
+  const newEmail = await EmailDetail.create({ ...body, clientId, password });
 
   if (!newEmail) {
     return res.status(400).json({
@@ -47,7 +50,7 @@ const putUpdateClientEmailDetails = async (req, res) => {
   // update details
   emailDetail.domain = body.domain;
   emailDetail.email = body.email;
-  emailDetail.password = body.password;
+  emailDetail.password = encrypt(body.password);
   await emailDetail.save();
 
   res.status(200).json({ success: true, data: emailDetail });

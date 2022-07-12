@@ -24,7 +24,7 @@ const CmsDetail = db.define('cmsDetail', {
     type: DataTypes.TEXT,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: false,
   },
 });

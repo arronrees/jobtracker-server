@@ -1,5 +1,6 @@
 const { validateUUID } = require('../lib/validation');
 const OtherClientDetail = require('../models/OtherClientDetail');
+const { encrypt } = require('../lib/crypt');
 
 const postNewClientOtherDetails = async (req, res) => {
   const { clientId } = req.params;
@@ -10,16 +11,20 @@ const postNewClientOtherDetails = async (req, res) => {
     return res.status(202).json({ success: false, error: 'No client found' });
   }
 
+  const password = encrypt(body.password);
+
   // create new details
-  const newOtherDetail = await OtherClientDetail.create({ ...body, clientId });
+  const newOtherDetail = await OtherClientDetail.create({
+    ...body,
+    clientId,
+    password,
+  });
 
   if (!newOtherDetail) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        error: 'Unable to create account details, please try again',
-      });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create account details, please try again',
+    });
   }
 
   res.status(200).json({ success: true, data: newOtherDetail });
@@ -50,7 +55,7 @@ const putUpdateClientOtherDetails = async (req, res) => {
   otherDetail.name = body.name;
   otherDetail.username = body.username;
   otherDetail.email = body.email;
-  otherDetail.password = body.password;
+  otherDetail.password = encrypt(body.password);
   otherDetail.notes = body.notes;
   await otherDetail.save();
 

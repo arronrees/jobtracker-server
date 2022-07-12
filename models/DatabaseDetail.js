@@ -25,7 +25,7 @@ const DatabaseDetail = db.define('databaseDetail', {
     allowNull: false,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: false,
   },
 });

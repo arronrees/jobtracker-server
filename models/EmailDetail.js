@@ -21,7 +21,7 @@ const EmailDetail = db.define('emailDetail', {
     allowNull: false,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: false,
   },
 });

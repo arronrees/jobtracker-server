@@ -24,7 +24,7 @@ const OtherClientDetail = db.define('otherClientDetail', {
     type: DataTypes.TEXT,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: false,
   },
   notes: {

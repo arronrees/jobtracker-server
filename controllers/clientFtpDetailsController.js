@@ -1,5 +1,6 @@
 const { validateUUID } = require('../lib/validation');
 const FtpDetail = require('../models/FtpDetail');
+const { encrypt } = require('../lib/crypt');
 
 const postNewClientFtpDetails = async (req, res) => {
   const { clientId } = req.params;
@@ -10,8 +11,14 @@ const postNewClientFtpDetails = async (req, res) => {
     return res.status(404).json({ success: false, error: 'No client found' });
   }
 
+  const password = encrypt(body.password);
+
   // create new details
-  const newFtp = await FtpDetail.create({ ...body, clientId });
+  const newFtp = await FtpDetail.create({
+    ...body,
+    clientId,
+    password,
+  });
 
   if (!newFtp) {
     return res.status(400).json({
@@ -49,7 +56,7 @@ const putUpdateClientFtpDetails = async (req, res) => {
   ftpDetail.ftpAddress = body.ftpAddress;
   ftpDetail.hostDirectory = body.hostDirectory;
   ftpDetail.login = body.login;
-  ftpDetail.password = body.password;
+  ftpDetail.password = encrypt(body.password);
   await ftpDetail.save();
 
   res.status(200).json({ success: true, data: ftpDetail });

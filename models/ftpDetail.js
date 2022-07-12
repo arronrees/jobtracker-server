@@ -29,7 +29,7 @@ const FtpDetail = db.define('ftpDetail', {
     allowNull: false,
   },
   password: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: false,
   },
 });

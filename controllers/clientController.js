@@ -6,6 +6,7 @@ const EmailDetail = require('../models/EmailDetail');
 const DatabaseDetail = require('../models/DatabaseDetail');
 const CmsDetail = require('../models/CmsDetail');
 const OtherClientDetail = require('../models/OtherClientDetail');
+const { decrypt } = require('../lib/crypt');
 
 const getAllClients = async (req, res) => {
   // find all clients
@@ -53,6 +54,21 @@ const getSingleClient = async (req, res) => {
     order: [['createdAt', 'ASC']],
   });
 
+  const ftps = [];
+
+  for (let i = 0; i < ftpDetails.length; i++) {
+    const ftp = ftpDetails[i];
+
+    const p = decrypt(ftp.password);
+
+    const f = {
+      ...ftp,
+      password: p,
+    };
+
+    ftps.push(f);
+  }
+
   const emailDetails = await EmailDetail.findAll({
     raw: true,
     where: {
@@ -60,6 +76,21 @@ const getSingleClient = async (req, res) => {
     },
     order: [['createdAt', 'ASC']],
   });
+
+  const emails = [];
+
+  for (let i = 0; i < emailDetails.length; i++) {
+    const email = emailDetails[i];
+
+    const p = decrypt(email.password);
+
+    const e = {
+      ...email,
+      password: p,
+    };
+
+    emails.push(e);
+  }
 
   const databaseDetails = await DatabaseDetail.findAll({
     raw: true,
@@ -69,6 +100,21 @@ const getSingleClient = async (req, res) => {
     order: [['createdAt', 'ASC']],
   });
 
+  const dbs = [];
+
+  for (let i = 0; i < databaseDetails.length; i++) {
+    const db = databaseDetails[i];
+
+    const p = decrypt(db.password);
+
+    const d = {
+      ...db,
+      password: p,
+    };
+
+    dbs.push(d);
+  }
+
   const cmsDetails = await CmsDetail.findAll({
     raw: true,
     where: {
@@ -76,6 +122,21 @@ const getSingleClient = async (req, res) => {
     },
     order: [['createdAt', 'ASC']],
   });
+
+  const cmss = [];
+
+  for (let i = 0; i < cmsDetails.length; i++) {
+    const cms = cmsDetails[i];
+
+    const p = decrypt(cms.password);
+
+    const c = {
+      ...cms,
+      password: p,
+    };
+
+    cmss.push(c);
+  }
 
   const otherDetails = await OtherClientDetail.findAll({
     raw: true,
@@ -85,15 +146,30 @@ const getSingleClient = async (req, res) => {
     order: [['createdAt', 'ASC']],
   });
 
+  const others = [];
+
+  for (let i = 0; i < otherDetails.length; i++) {
+    const other = otherDetails[i];
+
+    const p = decrypt(other.password);
+
+    const o = {
+      ...other,
+      password: p,
+    };
+
+    others.push(o);
+  }
+
   // client to show to user
   const fullClient = {
     ...client,
     address,
-    ftpDetails,
-    emailDetails,
-    databaseDetails,
-    cmsDetails,
-    otherDetails,
+    ftpDetails: ftps,
+    emailDetails: emails,
+    databaseDetails: dbs,
+    cmsDetails: cmss,
+    otherDetails: others,
   };
 
   res.status(200).json(fullClient);
@@ -187,12 +263,10 @@ const deleteClient = async (req, res) => {
 
   // check if client or address exists
   if (!client || !address) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        error: 'Unable to delete client, please try again',
-      });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to delete client, please try again',
+    });
   }
 
   await client.destroy();

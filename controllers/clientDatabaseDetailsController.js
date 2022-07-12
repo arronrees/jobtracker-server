@@ -1,5 +1,6 @@
 const { validateUUID } = require('../lib/validation');
 const DatabaseDetail = require('../models/DatabaseDetail');
+const { encrypt } = require('../lib/crypt');
 
 const postNewClientDatabaseDetails = async (req, res) => {
   const { clientId } = req.params;
@@ -10,8 +11,14 @@ const postNewClientDatabaseDetails = async (req, res) => {
     return res.status(202).json({ success: false, error: 'No client found' });
   }
 
+  const password = encrypt(body.password);
+
   // create new details
-  const newDatabaseDetail = await DatabaseDetail.create({ ...body, clientId });
+  const newDatabaseDetail = await DatabaseDetail.create({
+    ...body,
+    clientId,
+    password,
+  });
 
   if (!newDatabaseDetail) {
     return res.status(400).json({
@@ -48,7 +55,7 @@ const putUpdateClientDatabaseDetails = async (req, res) => {
   databaseDetail.url = body.url;
   databaseDetail.databaseName = body.databaseName;
   databaseDetail.username = body.username;
-  databaseDetail.password = body.password;
+  databaseDetail.password = encrypt(body.password);
   await databaseDetail.save();
 
   res.status(200).json({ success: true, data: databaseDetail });

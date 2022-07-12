@@ -1,5 +1,6 @@
 const { validateUUID } = require('../lib/validation');
 const CmsDetail = require('../models/CmsDetail');
+const { encrypt } = require('../lib/crypt');
 
 const postNewClientCmsDetails = async (req, res) => {
   const { clientId } = req.params;
@@ -10,8 +11,10 @@ const postNewClientCmsDetails = async (req, res) => {
     return res.status(202).json({ success: false, error: 'No client found' });
   }
 
+  const password = encrypt(body.password);
+
   // create new details
-  const newCms = await CmsDetail.create({ ...body, clientId });
+  const newCms = await CmsDetail.create({ ...body, clientId, password });
 
   if (!newCms) {
     return res
@@ -47,7 +50,7 @@ const putUpdateClientCmsDetails = async (req, res) => {
   cmsDetail.url = body.url;
   cmsDetail.email = body.email;
   cmsDetail.login = body.login;
-  cmsDetail.password = body.password;
+  cmsDetail.password = encrypt(body.password);
   await cmsDetail.save();
 
   res.status(200).json({ success: true, data: cmsDetail });
