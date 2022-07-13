@@ -17,10 +17,21 @@ const ClientJob = db.define('clientJob', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.TEXT,
+    type: DataTypes.ENUM,
+    values: ['Quote', 'In Progress', 'Complete'],
   },
-  amount: {
-    type: DataTypes.STRING(255),
+  cost: {
+    type: DataTypes.FLOAT,
+  },
+  includingVat: {
+    type: DataTypes.BOOLEAN,
+  },
+  department: {
+    type: DataTypes.ENUM,
+    values: ['Web', 'Print', 'Other'],
+  },
+  type: {
+    type: DataTypes.TEXT,
   },
 });
 

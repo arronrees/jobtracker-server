@@ -1,5 +1,65 @@
 const { validateUUID } = require('../lib/validation');
+const Client = require('../models/Client');
 const ClientJob = require('../models/ClientJob');
+
+const getAllClientJobs = async (req, res) => {
+  // find all jobs
+  const jobs = await ClientJob.findAll({
+    raw: true,
+    order: [['createdAt', 'DESC']],
+  });
+
+  // find all client names & ids
+  const allJobs = [];
+  const allClients = [];
+
+  for (let i = 0; i < jobs.length; i++) {
+    const client = await Client.findOne({
+      where: { id: jobs[i].clientId },
+      attributes: ['name', 'id'],
+      raw: true,
+    });
+
+    const job = { ...jobs[i], client };
+
+    allJobs.push(job);
+    allClients.push(client);
+  }
+
+  // get unique clients
+  let clients = [];
+  let clientss = [];
+
+  allClients.forEach((item) => {
+    if (!clients.includes(item.id)) {
+      clients.push(item.id);
+      clientss.push(item);
+    }
+  });
+
+  // sort clients
+  const c = clientss.sort((a, b) => ('' + a['name']).localeCompare(b['name']));
+
+  res.status(200).json({ success: true, data: { allJobs, allClients: c } });
+};
+
+const getSingleClientJob = async (req, res) => {
+  const { id } = req.params;
+
+  // find all jobs
+  const job = await ClientJob.findOne({
+    where: { id },
+    raw: true,
+    order: [['createdAt', 'ASC']],
+  });
+
+  // check job exists
+  if (!job) {
+    return res.status(404).json({ success: false, error: 'No job found' });
+  }
+
+  res.status(200).json({ success: true, data: job });
+};
 
 const postNewClientJob = async (req, res) => {
   const { clientId } = req.params;
@@ -12,7 +72,7 @@ const postNewClientJob = async (req, res) => {
 
   const newJob = await ClientJob.create({
     ...body,
-    amount: parseFloat(body.amount),
+    cost: parseFloat(body.cost),
     clientId,
   });
 
@@ -47,13 +107,17 @@ const putUpdateClientJob = async (req, res) => {
   // update details
   job.title = body.title;
   job.status = body.status;
-  job.amount = body.amount;
+  job.cost = parseFloat(body.cost);
+  job.includingVat = body.includingVat;
+  job.department = body.department;
   await job.save();
 
   res.status(200).json({ success: true, data: job });
 };
 
 module.exports = {
+  getAllClientJobs,
+  getSingleClientJob,
   postNewClientJob,
   putUpdateClientJob,
 };

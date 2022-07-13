@@ -5,6 +5,7 @@ const cors = require('cors');
 const { db } = require('./lib/db');
 
 const clientRoutes = require('./routes/clientRoutes');
+const clientJobRoutes = require('./routes/clientJobRoutes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(morgan('tiny'));
 
 // client routes
 app.use('/api/clients', clientRoutes);
+app.use('/api/jobs', clientJobRoutes);
 
 // general 404 route
 app.use((req, res) => {

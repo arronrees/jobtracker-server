@@ -6,8 +6,6 @@ const databaseRoutes = require('./databaseRoutes');
 const cmsRoutes = require('./cmsRoutes');
 const otherDetailRoutes = require('./otherDetailRoutes');
 
-const clientJobRoutes = require('./clientJobRoutes');
-
 const {
   getAllClients,
   getAllClientsSearch,
@@ -29,8 +27,6 @@ router.use('/database-details', databaseRoutes);
 router.use('/cms-details', cmsRoutes);
 
 router.use('/other-details', otherDetailRoutes);
-
-router.use('/client-job', clientJobRoutes);
 
 router.get('/', getAllClients);
 

@@ -13,7 +13,7 @@ const getAllClients = async (req, res) => {
   // find all clients
   const clients = await Client.findAll({ order: [['name', 'ASC']], raw: true });
 
-  res.status(200).json(clients);
+  res.status(200).json({ success: true, data: clients });
 };
 
 const getAllClientsSearch = async (req, res) => {
@@ -24,7 +24,7 @@ const getAllClientsSearch = async (req, res) => {
     raw: true,
   });
 
-  res.status(200).json(clients);
+  res.status(200).json({ success: true, data: clients });
 };
 
 const getSingleClient = async (req, res) => {
@@ -32,7 +32,7 @@ const getSingleClient = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No Client Found' });
+    return res.status(404).json({ success: false, error: 'No Client Found' });
   }
 
   // find client
@@ -40,7 +40,7 @@ const getSingleClient = async (req, res) => {
 
   // check if client exists
   if (!client) {
-    return res.status(404).json({ error: 'No Client Found' });
+    return res.status(404).json({ success: false, error: 'No Client Found' });
   }
 
   // find relevant client details and decrypt passwords
@@ -166,7 +166,7 @@ const getSingleClient = async (req, res) => {
   const jobs = await ClientJob.findAll({
     where: { clientId: id },
     raw: true,
-    order: [['createdAt', 'ASC']],
+    order: [['createdAt', 'DESC']],
   });
 
   // client to show to user
@@ -181,7 +181,7 @@ const getSingleClient = async (req, res) => {
     jobs,
   };
 
-  res.status(200).json(fullClient);
+  res.status(200).json({ success: true, data: fullClient });
 };
 
 const postNewClient = async (req, res) => {
@@ -199,12 +199,10 @@ const postNewClient = async (req, res) => {
 
   // check if client created successfully
   if (!newClient) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        error: 'Unable to create client, please try again',
-      });
+    return res.status(400).json({
+      success: false,
+      error: 'Unable to create client, please try again',
+    });
   }
 
   // client to show to user
@@ -219,7 +217,7 @@ const putUpdateClient = async (req, res) => {
 
   // validate id
   if (!validateUUID(id)) {
-    return res.status(404).json({ error: 'No Client Found' });
+    return res.status(404).json({ success: false, error: 'No Client Found' });
   }
 
   const foundClient = await Client.findOne({ where: { id } });
