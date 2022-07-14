@@ -110,6 +110,8 @@ const putUpdateClientJob = async (req, res) => {
   job.cost = parseFloat(body.cost);
   job.includingVat = body.includingVat;
   job.department = body.department;
+  job.type = body.type;
+  job.completedDate = body.completedDate;
   await job.save();
 
   res.status(200).json({ success: true, data: job });

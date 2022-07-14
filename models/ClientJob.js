@@ -17,8 +17,7 @@ const ClientJob = db.define('clientJob', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM,
-    values: ['Quote', 'In Progress', 'Complete'],
+    type: DataTypes.STRING(255),
   },
   cost: {
     type: DataTypes.FLOAT,
@@ -27,11 +26,16 @@ const ClientJob = db.define('clientJob', {
     type: DataTypes.BOOLEAN,
   },
   department: {
-    type: DataTypes.ENUM,
-    values: ['Web', 'Print', 'Other'],
+    type: DataTypes.STRING(255),
   },
   type: {
     type: DataTypes.TEXT,
+  },
+  completedDate: {
+    type: DataTypes.DATEONLY,
+  },
+  createdAt: {
+    type: DataTypes.DATEONLY,
   },
 });
 

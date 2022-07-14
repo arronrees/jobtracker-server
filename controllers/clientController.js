@@ -189,13 +189,10 @@ const postNewClient = async (req, res) => {
 
   const newAddress = await Address.create(address, { raw: true });
 
-  const newClient = await Client.create(
-    {
-      ...client,
-      address: newAddress.id,
-    },
-    { raw: true }
-  );
+  const newClient = await Client.create({
+    ...client,
+    address: newAddress.id,
+  });
 
   // check if client created successfully
   if (!newClient) {
@@ -206,7 +203,7 @@ const postNewClient = async (req, res) => {
   }
 
   // client to show to user
-  const fullNewClient = { ...newClient, address: newAddress };
+  const fullNewClient = { ...newClient.dataValues, address: newAddress };
 
   res.status(200).json({ success: true, data: fullNewClient });
 };
