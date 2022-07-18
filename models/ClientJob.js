@@ -12,8 +12,11 @@ const ClientJob = db.define('clientJob', {
     type: UUID,
     allowNull: false,
   },
+  company: {
+    type: DataTypes.STRING(255),
+  },
   title: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(255),
     allowNull: false,
   },
   status: {
@@ -22,24 +25,21 @@ const ClientJob = db.define('clientJob', {
   cost: {
     type: DataTypes.FLOAT,
   },
-  includingVat: {
-    type: DataTypes.BOOLEAN,
-  },
   department: {
     type: DataTypes.STRING(255),
   },
   type: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(255),
   },
   completedDate: {
     type: DataTypes.DATEONLY,
   },
-  createdAt: {
+  createdDate: {
     type: DataTypes.DATEONLY,
   },
 });
 
-ClientJob.sync({ force: false }).then(() => {
+ClientJob.sync({ alter: false }).then(() => {
   console.log('[Model] [ClientJob] Synced');
 });
 
