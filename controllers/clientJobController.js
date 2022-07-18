@@ -20,7 +20,7 @@ const getAllClientJobs = async (req, res) => {
       raw: true,
     });
 
-    const job = { ...jobs[i], client };
+    const job = { ...jobs[i], client, clientName: client.name };
 
     allJobs.push(job);
     allClients.push(client);
@@ -53,12 +53,19 @@ const getSingleClientJob = async (req, res) => {
     order: [['createdAt', 'ASC']],
   });
 
+  // find all clients, just name & id
+  const clients = await Client.findAll({
+    attributes: ['name', 'id'],
+    order: [['name', 'ASC']],
+    raw: true,
+  });
+
   // check job exists
   if (!job) {
     return res.status(404).json({ success: false, error: 'No job found' });
   }
 
-  res.status(200).json({ success: true, data: job });
+  res.status(200).json({ success: true, data: { job, clients } });
 };
 
 const postNewClientJob = async (req, res) => {
@@ -105,6 +112,8 @@ const putUpdateClientJob = async (req, res) => {
   }
 
   // update details
+  job.clientId = body.client;
+  job.company = body.company;
   job.title = body.title;
   job.status = body.status;
   job.cost = parseFloat(body.cost);
